@@ -66,6 +66,7 @@ class LoanItem:
 class BookItem:
     def __init__(self,book):
         self.book = book
+        self.status = "a"
 
 class Catalog:
     def __init__(self,name):
