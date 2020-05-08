@@ -1,3 +1,4 @@
+import json;
 class Person:
     def __init__(self,name,birthday,gender):
         self.name = name
@@ -24,9 +25,7 @@ class Librarian(Person):
         self.username = username
         self.password = password
         self.email = email
-class Author:
-    def __init__(self,name):
-        self.name = name
+
 class Book:
     def __init__(self,author,country,imageLink,language,wikilink,pages,title,year):
         self.author = author
@@ -60,6 +59,7 @@ class Book:
 
     def getYear(self):
         return self.year
+
 class LoanItem:
     def __init__(self,bookItem,subscriber):
         self.subscriber = subscriber
@@ -68,6 +68,10 @@ class LoanItem:
 class BookItem:
     def __init__(self,book):
         self.book = book
+        self.status = "available"
+    
+    def changeStatus(self,status):
+        self.status = status
 
 class Catalog:
     def __init__(self,name):
@@ -82,6 +86,25 @@ class Catalog:
                 self.bookItems.append(BookItem(i))
             else:
                 print("No book with title: {} found, please try again.".format(bookTitle))
+    
+    def parseCatalog(self):
+        dumper = []
+        for i in self.books:
+            
+
+            dumper.append({
+                "author" : i.author,
+                "country" : i.country,
+                "imageLink" : i.imageLink,
+                "language" : i.language,
+                "link" : i.wikiLink,
+                "pages" : i.pages,
+                "title" : i.title,
+                "year" : i.year,
+                
+            })
+        with open('books.json','w') as bookWrite:
+            json.dump(dumper,bookWrite)
 
 class LoanAdministration:
     def __init__(self,name):
@@ -93,3 +116,4 @@ class LoanAdministration:
             self.loans.append(LoanItem(bookItem,username))
         else:
             print("No such item in catalog")
+
