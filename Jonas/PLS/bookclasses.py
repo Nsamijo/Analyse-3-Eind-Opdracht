@@ -42,8 +42,7 @@ class Book:
         return "" + self.author + self.language + self.title + self.year + self.country
 
 class BookItem:
-    def __init__(self,movie,book):
-        self.movie = movie
+    def __init__(self,book):
         self.book = book
         self.status = "available"
     
@@ -78,12 +77,14 @@ class Catalog:
         self.parseCatalog()
     
     
-    def addBookItem(self,bookTitle):
+    def addBookItem(self,ID):
         for i in self.books:
-            if i.getTitle() == bookTitle:
-                self.bookItems.append(BookItem)
-            else:
-                print("No book with title: {} found, please try again.".format(bookTitle))
+            if i.id == ID:
+                self.bookItems.append(BookItem(i))
+                self.parseCatalog()
+                return True
+        return False
+            
     
     def parseCatalog(self):
         bookdumper = []
@@ -119,10 +120,8 @@ class Catalog:
                 i = 0
         return res
 
-    def removeBook(self,ID):
-        for book in self.books:
-            if book.bookid == ID:
-                self.books.remove(book)
+    def removeBook(self,index):
+        self.books.pop(index)
         self.parseCatalog()
     def printBooks(self):
         helper.printBookTable(self.books)

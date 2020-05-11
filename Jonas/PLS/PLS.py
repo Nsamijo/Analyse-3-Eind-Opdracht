@@ -33,7 +33,24 @@ def main():
     
 
 def BookItemManager():
-    pass
+    abort = False
+    while not abort:
+        print("[1] Add bookitem\n[2] Remove bookitem\n[3] View bookitems\n[4] Back")
+        no = input(">>> ")
+        try:
+            no = int(no)
+            if no == 1:
+                clear()
+                addBookItem()
+        except:
+            clear()
+            print("Invalid input")
+def addBookItem():
+    catalog = bookclasses.Catalog("catalog")
+    abort = False
+    while not abort:
+        pass
+    
 def BookManager(): 
     abort = False
     while not abort:
@@ -123,7 +140,22 @@ def printBooks():
             clear()
 def removeBook():
     catalog = bookclasses.Catalog("catalog")
-
-
+    abort = False
+    while not abort:
+        catalog.printBooks()
+        print("\nType the number of the book you would like to delete")
+        print("\nWhen you want to leave type \"e\"\n")
+        command = input(">>> ")
+        if command != "e":
+            try:
+                command = int(command)
+                catalog.removeBook(command-1)
+            except:
+                clear()
+                print("Invalid input")
+        else:
+            abort = True
+            clear()
+            
 if __name__ == "__main__":
     main()
