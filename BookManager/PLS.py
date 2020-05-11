@@ -22,7 +22,7 @@ def main():
                 clear()
                 BookManager()
             if(no == 2):
-                clear()
+                clear() 
                 BookItemManager()
             if(no == 3):
                 clear()
