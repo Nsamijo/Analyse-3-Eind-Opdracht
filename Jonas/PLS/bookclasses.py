@@ -1,30 +1,8 @@
 import json
-class Person:
-    def __init__(self,name,birthday,gender):
-        self.name = name
-        self.birthday = birthday
-        self.gender = gender
-#bday in format "dd/mm/yyyy"
-class Subscriber(Person):
-    def __init__(self,name,birthday,gender,username,email):
-        super.__init__(name,birthday,gender)
-        self.username = username
-        self.email = email
-    
-    def getUsername(self):
-        return self.username
-    def getName(self):
-        return self.name
-    def getBirthday(self):
-        return self.birthday
-    def getEmail(self):
-        return self.email
-class Librarian(Person):
-    def __init__(self,name,birthday,gender,username,password,email):
-        super.__init__(name,birthday,gender)
-        self.username = username
-        self.password = password
-        self.email = email
+import os
+import helper
+
+curdir = os.path.dirname(os.path.realpath(__file__))
 
 class Book:
     def __init__(self,id,author,country,imageLink,language,wikilink,pages,title,year):
@@ -63,11 +41,6 @@ class Book:
     def getString(self):
         return "" + self.author + self.language + self.title + self.year + self.country
 
-class LoanItem:
-    def __init__(self,bookItem,subscriber):
-        self.subscriber = subscriber
-        self.bookItem = bookItem
-
 class BookItem:
     def __init__(self,movie,book):
         self.movie = movie
@@ -81,14 +54,14 @@ class Catalog:
     def __init__(self,name):
         self.name = name
         self.books = []
-        with open('books.json','r') as bookRead:
-            data = bookRead
+        with open(curdir + '/books.json','r') as bookRead:
+            data = json.load(bookRead)
             for i in range(len(data)):
                 j = data[i]
                 self.books.append(Book(j["id"],j["author"],j["country"],j["imageLink"],j["language"],j["link"],j["pages"],j["title"],j["year"]))
         self.bookItems = []
-        with open('bookitems.json','r') as bookItemRead:
-            data = bookItemRead
+        with open(curdir + '/bookitems.json','r') as bookItemRead:
+            data = json.load(bookItemRead)
             for i in range(len(data)):
                 j = data[i]
     def getResults(self,input):
@@ -97,12 +70,12 @@ class Catalog:
             if input in book.getString:
                 res.append(book)
         return res
-
         
     
 
     def addBook(self,author,country,imageLink,language,wikilink,pages,title,year):
         self.books.append(Book(self.pickId(),author,country,imageLink,language,wikilink,pages,title,year))
+        self.parseCatalog()
     
     
     def addBookItem(self,bookTitle):
@@ -122,20 +95,21 @@ class Catalog:
                 "country" : i.country,
                 "imageLink" : i.imageLink,
                 "language" : i.language,
-                "link" : i.wikiLink,
+                "link" : i.wikilink,
                 "pages" : i.pages,
                 "title" : i.title,
                 "year" : i.year,
             })
-        with open('books.json','w') as bookWrite:
+        with open(curdir + '/books.json','w') as bookWrite:
             json.dump(bookdumper,bookWrite)
         for i in self.bookItems:
             bookitemdumper.append({
                 "movieId" : i.movie.id
             })
         
-        with open('bookitems.json','w') as bookItemWrite:
+        with open(curdir +'/bookitems.json','w') as bookItemWrite:
             json.dump(bookitemdumper,bookItemWrite)
+
     def pickId(self):
         res = 0
         i = 0
@@ -145,10 +119,11 @@ class Catalog:
                 i = 0
         return res
 
-class LoanAdministration:
-    def __init__(self,name):
-        self.name = name
-        self.loans = []
-    
-    
-
+    def removeBook(self,ID):
+        for book in self.books:
+            if book.bookid == ID:
+                self.books.remove(book)
+        self.parseCatalog()
+    def printBooks(self):
+        helper.printBookTable(self.books)
+            
