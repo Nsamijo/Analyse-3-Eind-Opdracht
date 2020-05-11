@@ -53,13 +53,13 @@ class Catalog:
     def __init__(self,name):
         self.name = name
         self.books = []
-        with open(curdir + '/books.json','r') as bookRead:
+        with open(curdir + '/src/books.json','r') as bookRead:
             data = json.load(bookRead)
             for i in range(len(data)):
                 j = data[i]
                 self.books.append(Book(j["id"],j["author"],j["country"],j["imageLink"],j["language"],j["link"],j["pages"],j["title"],j["year"]))
         self.bookItems = []
-        with open(curdir + '/bookitems.json','r') as bookItemRead:
+        with open(curdir + '/src/bookitems.json','r') as bookItemRead:
             data = json.load(bookItemRead)
             for i in range(len(data)):
                 j = data[i]
@@ -101,14 +101,14 @@ class Catalog:
                 "title" : i.title,
                 "year" : i.year,
             })
-        with open(curdir + '/books.json','w') as bookWrite:
+        with open(curdir + '/src/books.json','w') as bookWrite:
             json.dump(bookdumper,bookWrite)
         for i in self.bookItems:
             bookitemdumper.append({
                 "movieId" : i.movie.id
             })
         
-        with open(curdir +'/bookitems.json','w') as bookItemWrite:
+        with open(curdir +'/src/bookitems.json','w') as bookItemWrite:
             json.dump(bookitemdumper,bookItemWrite)
 
     def pickId(self):
