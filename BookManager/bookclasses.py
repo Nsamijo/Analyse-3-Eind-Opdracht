@@ -39,12 +39,13 @@ class Book:
     def getYear(self):
         return self.year
     def getString(self):
-        return "" + self.author + self.language + self.title + self.year + self.country
+        return ("" + self.author + self.language + self.title + str(self.year) + self.country).lower()
 
 class BookItem:
-    def __init__(self,book):
+    def __init__(self,id,book,status="available"):
+        self.id = id
         self.book = book
-        self.status = "available"
+        self.status = status
     
     def changeStatus(self,status):
         self.status = status
@@ -63,10 +64,11 @@ class Catalog:
             data = json.load(bookItemRead)
             for i in range(len(data)):
                 j = data[i]
+                self.bookItems.append(BookItem(j["id"],self.getBookbyId(j["BookId"]),j["Status"]))
     def getResults(self,input):
         res = []
         for book in self.books:
-            if input in book.getString:
+            if input in book.getString():
                 res.append(book)
         return res
         
@@ -80,7 +82,7 @@ class Catalog:
     def addBookItem(self,ID):
         for i in self.books:
             if i.id == ID:
-                self.bookItems.append(BookItem(i))
+                self.bookItems.append(BookItem(self.pickItemId(),i))
                 self.parseCatalog()
                 return True
         return False
@@ -105,7 +107,9 @@ class Catalog:
             json.dump(bookdumper,bookWrite)
         for i in self.bookItems:
             bookitemdumper.append({
-                "movieId" : i.movie.id
+                "id" : i.id,
+                "BookId" : i.book.id,
+                "Status" : i.status
             })
         
         with open(curdir +'/src/bookitems.json','w') as bookItemWrite:
@@ -119,10 +123,34 @@ class Catalog:
                 res += 1
                 i = 0
         return res
+    def pickItemId(self):
+        res = 0
+        i = 0
+        while i < len(self.bookItems):
+            if self.bookItems[i].id == res:
+                res += 1
+                i = 0
+            else:
+                i += 1
+        return res
 
     def removeBook(self,index):
         self.books.pop(index)
         self.parseCatalog()
-    def printBooks(self):
-        helper.printBookTable(self.books)
-            
+    def printBooks(self,search):
+        lis = self.getResults(search)
+        helper.printBookTable(lis)
+    def getBookbyId(self,ID):
+        for book in self.books:
+            if book.id == ID:
+                return book
+    def printBookItemTable(self,input):
+        lis = self.bookItems
+        booklen = len(max([BookItem.book.title for BookItem in lis],key=len))
+        if(lis != []):
+            i = 1
+            print("No.    ","Title",(booklen-5)*" ","status")
+            for item in lis:
+                
+                print(str(i)+".",(5-len(str(i)))*" ",item.book.title,(booklen-len(item.book.title))*" ",item.status)
+                i += 1

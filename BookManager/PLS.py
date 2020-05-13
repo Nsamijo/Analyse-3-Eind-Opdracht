@@ -39,18 +39,78 @@ def BookItemManager():
         no = input(">>> ")
         try:
             no = int(no)
-            if no == 1:
-                clear()
-                addBookItem()
         except:
             clear()
             print("Invalid input")
+        else:
+            if no == 1:
+                clear()
+                addBookItem()
+            if no == 2:
+                clear()
+                removeBookItem()
+            if no == 3:
+                clear()
+                viewBookItems()
+            if no == 4:
+                clear()
+                abort = True
 def addBookItem():
     catalog = bookclasses.Catalog("catalog")
     abort = False
+    message = ""
     while not abort:
-        pass
+        clear()
+        print("Type \"EXIT\" to exit\nOr type anything else to search for a book")
+        
+        
+        if message != "":
+            print("\n" + message + "\n")
+        command = input(">>> ")
+        if command == "e":
+            clear()
+            abort = True
+        else:
+            catalog.printBooks(command)
+            print("\nType de number of the book you'd like to make a bookitem of")
+            command = input(">>> ")
+            try:
+                command = int(command)
+                catalog.addBookItem(catalog.books[command-1].id)
+                message = "Bookitem added"
+            
+            except IndexError:
+                clear()
+                message = "Not in the list"
+            except ValueError:
+                clear()
+                message = "Invalid input"
+            except:
+                message = "Whao"
+            else:
+                message = ""
+            
+
+def viewBookItems():
+    catalog = bookclasses.Catalog("catalog")
+    abort = False
+    while not abort:
+        print("\nType \"EXIT\" to exit\nOr type anything else to search\n")
+        command = input(">>> ")
+        
+        if command == "e":
+            abort = True
+            clear()
+        else:
+            clear()
+            catalog.printBookItemTable(input)
+
+def removeBookItem():
+    catalog = bookclasses.Catalog("catalog")
+    abort = False
+    message = ""
     
+
 def BookManager(): 
     abort = False
     while not abort:
@@ -130,29 +190,40 @@ def addBook():
 def printBooks():
     catalog = bookclasses.Catalog("catalog")
     while True:
-        catalog.printBooks()
-        print("Type \"e\" to leave")
+        
+        print("Type \"EXIT\" to leave\nOr type anything else to search for a book\n")
         command = input(">>> ")
-        if command == "e":
+        if command == "EXIT":
             clear()
             break
         else:
             clear()
+            catalog.printBooks(command.lower())
+
 def removeBook():
     catalog = bookclasses.Catalog("catalog")
     abort = False
     while not abort:
-        catalog.printBooks()
+        
         print("\nType the number of the book you would like to delete")
-        print("\nWhen you want to leave type \"e\"\n")
+        print("\nWhen you want to leave type \"EXIT\"\n")
         command = input(">>> ")
-        if command != "e":
-            try:
-                command = int(command)
-                catalog.removeBook(command-1)
-            except:
-                clear()
-                print("Invalid input")
+        if command != "EXIT":
+            catalog.printBooks(command)
+            lis = catalog.getResults(command)
+            command = input(">>> ")
+            if(command != "EXIT"):
+                try:
+                    Print("Type the number of the book you'd like to remove")
+                    command = int(command)
+                    catalog.books.remove(lis[command-1])
+                    catalog.parseCatalog()
+                except:
+                    clear()
+                    print("Invalid input")
+                else:
+                    abort = True
+                    clear()
         else:
             abort = True
             clear()

@@ -1,4 +1,4 @@
-def getLongestLengths(lis):
+def getLongestBookLengths(lis):
     if len(lis) > 0:
         titles = [book.title for book in lis]
         authors = [book.author for book in lis]
@@ -10,11 +10,11 @@ def getLongestLengths(lis):
     else: 
         return []
 
-    
+
 
 
 def printBookTable(lis):
-    lens = getLongestLengths(lis)
+    lens = getLongestBookLengths(lis)
     if(lens != []):
         i = 1
         print("No.    Title",(lens[0]-5)*" ","Author",(lens[1]-6)*" ","Year",(lens[2]-4)*" ","Wikilink",(lens[3]-8)*" ")
