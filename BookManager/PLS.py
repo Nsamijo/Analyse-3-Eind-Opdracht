@@ -109,18 +109,46 @@ def removeBookItem():
     catalog = bookclasses.Catalog("catalog")
     abort = False
     message = ""
+    while not abort:
+        print("\nType \"EXIT\" to exit\nOr type anything else to search\n")
+        command = input(">>> ")
+        if command == "EXIT":
+            abort = True
+        else:
+            lis = [item for item in catalog.bookItems if command in item.book.getString()]
+            catalog.printBookItemTable(command)
+            print("Type the number of the book you'd like to delete\nOr type \"EXIT\" if you want to leave\n")
+            command = input(">>> ")
+            if command != "EXIT":
+                try:
+                    command = int(command)
+                    catalog.bookItems.remove(lis[command-1])
+                    clear()
+                    message = "Bookitem deleted"
+                except IndexError:
+                    clear()
+                    message = "Not in list"
+                except ValueError:
+                    clear()
+                    message = "Invalid input"
+
+            else:
+                abort = True
+
+        
+
     
 
 def BookManager(): 
     abort = False
     while not abort:
-        print("[1] Add book [2] View books [3] Remove book [4] Back")
+        print("[1] Add book \n[2] View books \n[3] Remove book \n[4] Change book\n[5] Back\n")
         no = input(">>> ")
         try:
             no = int(no)
         except:
             no = ""
-        if no != "" and 1 <= no <= 4:
+        if no != "" and 1 <= no <= 5:
             if no == 1:
                 clear()
                 addBook()
@@ -132,13 +160,14 @@ def BookManager():
                 removeBook()
             if no == 4:
                 clear()
+                changeBook()
+            if no == 5:
+                clear()
                 abort = True
         else:
             clear()
             print("Try again")
-def addBook():
-    catalog = bookclasses.Catalog("catalog")
-    inputs = {
+def addBook(inputs = {
         "author" : "",
         "country" : "",
         "imagelink" : "",
@@ -146,8 +175,9 @@ def addBook():
         "wikilink" : "",
         "pages" : "",
         "title" : "",
-        "year" : ""
-    }
+        "year" : ""}):
+    catalog = bookclasses.Catalog("catalog")
+    
     error = ""
 
     
@@ -187,6 +217,88 @@ def addBook():
 
     if command == "s":
         catalog.addBook(*[inputs[k] for k in inputs])
+def changeBook():
+    catalog = bookclasses.Catalog("catalog")
+    abort = False
+    message = ""
+    while not abort:
+        print("Search for the book you'd like to edit\nType \"EXIT\" if you want to leave")
+        if message != "":
+            print("\n",message,"\n")
+
+        command = input(">>> ")
+        if command != "EXIT":
+            lis = catalog.getResults(command)
+            catalog.printBooks(command)
+            print("\nType the number of the book you'd like to edit\n")
+            command = input(">>> ")
+            if command != "EXIT":
+                try:
+                    command = int(command)
+                    book = lis[command-1]
+                    error = ""
+                    inputs = {
+                        "author" : book.author,
+                        "country" : book.country,
+                        "imagelink" : book.imageLink,
+                        "language" : book.language,
+                        "wikilink" : book.wikilink,
+                        "pages" : book.pages,
+                        "title" : book.title,
+                        "year" : book.year}
+                    abort = False
+                    while not abort:
+                        print("To assign a value, type: variable=value")
+                        print("For example: author=J.K. Rowling")
+                        print("When you're done and want to save the book, type \"s\"")
+                        print("Else if you want to exit, type \"e\"\n")
+                        print("Author: %s"%(inputs["author"]))
+                        print("Country: %s"%(inputs["country"]))
+                        print("Imagelink: %s"%(inputs["imagelink"]))
+                        print("Language: %s"%(inputs["language"]))
+                        print("Wikilink: %s"%(inputs["wikilink"]))
+                        print("Pages: %s"%(inputs["pages"]))
+                        print("Title: %s"%(inputs["title"]))
+                        print("Year: %s"%(inputs["year"]))
+                        print(error + "\n")
+                        command = input(">>> ")
+                        if command != 'e' and command != 's':
+                            command = command.split("=")
+                            if len(command) >= 2:
+                                try:
+                                    inputs[command[0]] = command[1]
+                                except:
+                                    clear()
+                                    error = "No variable with that name"
+                            elif len(command) == 1:
+                                for var in inputs:
+                                    if inputs[var] == "":
+                                        inputs[var] = command[0]
+                                        break
+                        else:
+                            abort = True
+                            clear()
+
+                    if command == "s":
+                        catalog.books.remove(book)
+                        catalog.addBook(*[inputs[k] for k in inputs])
+                except ValueError:
+                    clear()
+                    message = "Invalid input"
+                except IndexError:
+                    clear()
+                    message = "Wrong number"
+                except:
+                    clear()
+                    message = "whoa"
+            else:
+                clear()
+                abort = True
+
+                
+        else:
+            abort = True
+    
 def printBooks():
     catalog = bookclasses.Catalog("catalog")
     while True:

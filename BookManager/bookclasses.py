@@ -122,6 +122,8 @@ class Catalog:
             if self.books[i].id == res:
                 res += 1
                 i = 0
+            else:
+                i += 1
         return res
     def pickItemId(self):
         res = 0
@@ -145,7 +147,7 @@ class Catalog:
             if book.id == ID:
                 return book
     def printBookItemTable(self,input):
-        lis = self.bookItems
+        lis = [item for item in self.bookItems if input in item.book.getString()]
         booklen = len(max([BookItem.book.title for BookItem in lis],key=len))
         if(lis != []):
             i = 1
