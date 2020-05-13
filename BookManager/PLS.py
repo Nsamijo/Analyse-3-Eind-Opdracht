@@ -26,7 +26,7 @@ def main():
                 BookItemManager()
             if(no == 3):
                 clear()
-                print("Exitting...")
+                print("Exitting...") 
                 abort = True
         
 
@@ -98,12 +98,12 @@ def viewBookItems():
         print("\nType \"EXIT\" to exit\nOr type anything else to search\n")
         command = input(">>> ")
         
-        if command == "e":
+        if command == "EXIT":
             abort = True
             clear()
         else:
             clear()
-            catalog.printBookItemTable(input)
+            catalog.printBookItemTable(command)
 
 def removeBookItem():
     catalog = bookclasses.Catalog("catalog")

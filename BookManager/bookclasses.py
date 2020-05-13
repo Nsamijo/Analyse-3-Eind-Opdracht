@@ -65,10 +65,10 @@ class Catalog:
             for i in range(len(data)):
                 j = data[i]
                 self.bookItems.append(BookItem(j["id"],self.getBookbyId(j["BookId"]),j["Status"]))
-    def getResults(self,input):
+    def getResults(self,inp):
         res = []
         for book in self.books:
-            if input in book.getString():
+            if inp in book.getString():
                 res.append(book)
         return res
         
@@ -146,10 +146,12 @@ class Catalog:
         for book in self.books:
             if book.id == ID:
                 return book
-    def printBookItemTable(self,input):
-        lis = [item for item in self.bookItems if input in item.book.getString()]
-        booklen = len(max([BookItem.book.title for BookItem in lis],key=len))
+    def printBookItemTable(self,inp):
+        booklis = self.getResults(inp.lower())
+        lis = [item for item in self.bookItems if item.book in booklis]
+        
         if(lis != []):
+            booklen = len(max([item.book.title for item in lis],key=len))
             i = 1
             print("No.    ","Title",(booklen-5)*" ","status")
             for item in lis:
