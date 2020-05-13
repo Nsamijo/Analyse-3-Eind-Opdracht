@@ -65,6 +65,7 @@ class Catalog:
             for i in range(len(data)):
                 j = data[i]
                 self.bookItems.append(BookItem(j["id"],self.getBookbyId(j["BookId"]),j["Status"]))
+
     def getResults(self,inp):
         res = []
         for book in self.books:
@@ -104,7 +105,7 @@ class Catalog:
                 "year" : i.year,
             })
         with open(curdir + '/src/books.json','w') as bookWrite:
-            json.dump(bookdumper,bookWrite)
+            json.dump(bookdumper,bookWrite, indent=4, sort_keys=True)
         for i in self.bookItems:
             bookitemdumper.append({
                 "id" : i.id,
@@ -113,7 +114,7 @@ class Catalog:
             })
         
         with open(curdir +'/src/bookitems.json','w') as bookItemWrite:
-            json.dump(bookitemdumper,bookItemWrite)
+            json.dump(bookitemdumper,bookItemWrite, indent=4, sort_keys=True)
 
     def pickId(self):
         res = 0
@@ -139,13 +140,16 @@ class Catalog:
     def removeBook(self,index):
         self.books.pop(index)
         self.parseCatalog()
+
     def printBooks(self,search):
         lis = self.getResults(search)
         helper.printBookTable(lis)
+
     def getBookbyId(self,ID):
         for book in self.books:
             if book.id == ID:
                 return book
+
     def printBookItemTable(self,inp):
         booklis = self.getResults(inp.lower())
         lis = [item for item in self.bookItems if item.book in booklis]

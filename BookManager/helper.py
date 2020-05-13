@@ -11,8 +11,6 @@ def getLongestBookLengths(lis):
         return []
 
 
-
-
 def printBookTable(lis):
     lens = getLongestBookLengths(lis)
     if(lens != []):

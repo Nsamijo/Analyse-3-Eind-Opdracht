@@ -1,1 +1,42 @@
-[{"id": 0, "BookId": 43, "Status": "available"}, {"id": 1, "BookId": 13, "Status": "available"}, {"id": 2, "BookId": 14, "Status": "available"}]
+[
+    {
+        "BookId": 43,
+        "Status": "available",
+        "id": 0
+    },
+    {
+        "BookId": 13,
+        "Status": "available",
+        "id": 1
+    },
+    {
+        "BookId": 14,
+        "Status": "available",
+        "id": 2
+    },
+    {
+        "BookId": 0,
+        "Status": "available",
+        "id": 3
+    },
+    {
+        "BookId": 4,
+        "Status": "available",
+        "id": 4
+    },
+    {
+        "BookId": 97,
+        "Status": "available",
+        "id": 5
+    },
+    {
+        "BookId": 0,
+        "Status": "available",
+        "id": 6
+    },
+    {
+        "BookId": 0,
+        "Status": "available",
+        "id": 7
+    }
+]

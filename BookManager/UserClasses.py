@@ -1,71 +1,123 @@
-import json,os
+import csv, os, json
+import collections
+
 curdir = os.path.dirname(os.path.realpath(__file__))
 
-class Person:
-    def __init__(self,name,birthday,gender):
-        self.Name = name
-        self.Birthday = birthday
-        self.Gender = gender
+#customers handeling
+class Customers:
 
+    customers = []
 
-class Customer(Person):
-    def __init__(self,name,birthday,gender,username,password,email):
-        super.__init__(name,birthday,gender)
-        self.Username = username
-        self.Password = password
-        self.Email = email
-
-class Librarian(Person):
-    def __init__(self,name,birthday,gender,username,password,email):
-        super.__init__(name,birthday,gender)
-        self.Username = username
-        self.Password = password
-        self.Email = email
-
-class UserAdministration:
     def __init__(self):
-        self.users = []
-        with open(curdir + "/src/customers.json","r") as custread:
-            data = json.load(custread)
-            for c in data:
-                self.users.append(Customer(*[c[f] for f in c]))
-        
+        with open(curdir + '/src/customers.csv', 'r') as File:
+            reader = csv.DictReader(File)
+            for row in reader:
+                self.customers.append(row)
 
-        self.librarians = []
-        with open(curdir + "/src/librarians.json","r") as libread:
-            data = json.load(libread)
-            for l in data:
-                self.librarians.append(Librarian(*[l[f] for f in l]))
+    def getUser(self, user):
+        return self.customers[int(user) - 1]
+
+    def addUser(self, gender, nameset, givennam, surnam, adres, zipcode, city, email, usernam, telephon):
+        """make another user and update the file"""
+        def UpdateCSV():
+            keys, values = [], []
+            for key, value in self.customers:
+                keys.append(key)
+                values.append(value)
+
+            with open(curdir + '/src/customers.csv', 'w') as File:
+                writer = csv.writer(File)
+                writer.writerow(keys)
+                writer.writerow(values)
+
+        user = {}
+        user['Number'] = str(int(self.customers[self.customers.Length - 1]) + 1)
+        user['Gender'] = gender
+        user['NameSet'] = nameset
+        user['GivenName'] = givennam
+        user['SurName'] = surnam
+        user['StreetAddress'] = adres
+        user['ZipCode'] = zipcode
+        user['City'] = city
+        user['EmailAddress'] = email
+        user['Username'] = usernam
+        user['TelephoneNumber'] = telephon
+
+        self.customers.append(user)
+
+        UpdateCSV()
+
+#blueprint for a librarian
+class Librarian:
+
+    def __init__(self, name, surnam, usernam, gender, email, passwd):
+        self.Name = name
+        self.SurName = surnam
+        self.UserName = usernam
+        self.Gender = gender
+        self.Email = email
+        self.Password = passwd
+
+    def checkPass(self, passwd):
+        return set(self.Password) == set(passwd)
+
+    def getName(self):
+        return self.Name + ' ' + self.SurName
+
+#this class will do the reading and writing for to the librarians json
+class Librarians:
+
+    librarians = []
+
+    #load the librarians in
+    def __init__(self):
+        with open(curdir + '/src/librarians.json', 'r') as File:
+            data = json.load(File)
+            for i in range(len(data)):
+                j = data[i]
+                #convert from json to Librarian
+                self.librarians.append(Librarian(j['Name'], j['SurName'], j['UserName'], j['Gender'], j['Email'], j['Password']))
+
+#update the json
+    def updateLibrarians(self):
+    #sort the data in json format
+        data = []
+        for i in self.librarians:
+            data.append(
+                {
+                    'Name': i.Name,
+                    'SurName': i.SurName,
+                    'UserName': i.UserName,
+                    'Gender': i.Gender,
+                    'Email': i.Email,
+                    'Password': i.Password
+                }
+            )
+
+        #store the data
+        with open(curdir + '/src/librarians.json', 'w') as File:
+            #dump the data to the file in a formatted fashion || pretty neat
+            json.dump(data, File, indent=4, sort_keys=True)
+
+
+#add a new librarian to the system
+    def addLibrarian(self, name, surnam, username, gender, email, passwd):
+        #data new librarian
+        self.librarians.append(Librarian(name, surnam, username, gender, email, passwd))
+        #update the json
+        self.updateLibrarians()
     
-    def ParseContents(self):
-        cusdumper = []
-        for c in self.users:
-            cusdumper.append({
-                "Name" : c.Name,
-                "Birthday" : c.Birthday,
-                "Gender" : c.Gender,
-                "Username" : c.Username,
-                "Password" : c.Password,
-                "Email" : c.Email
-            })
-        with open(curdir + "/src/customers.json","w") as cuswrite:
-            json.dump(cusdumper,cuswrite)
+#remove the librarian || yeet him/her away
+    def removeLibrarian(self, index):
+        #do the delete
+        self.librarians.remove(index)
+        #update the json
+        self.updateLibrarians()
 
-        libdumper = []
-        for l in self.librarians:
-            libdumper.append({
-                "Name" : l.Name,
-                "Birthday" : l.Birthday,
-                "Gender" : l.Gender,
-                "Username" : l.Username,
-                "Password" : l.Password,
-                "Email" : l.Email
-            })
-        with open(curdir + "/src/librarians.json","w") as libwrite:
-            json.dump(libdumper,libwrite)
-    def AddCustomer(self,name,birthday,gender,username,password,email):
-        self.users.append(Customer(name,birthday,gender,username,password,email))
-        self.ParseContents()
-    def AddLibrarian(self,name,birthday,gender,username,password,email):
-        self.librarians.append(Librarian(name,birthday,gender,username,password,email))
-        self.ParseContents()
+#check if the user exits and get the account to log in
+    def getAccount(self, usern, passwd):
+        for i in self.librarians:
+            if i.UserName == usern:
+                if i.Password == passwd:
+                    return i
+        return None
