@@ -1,4 +1,4 @@
-import bookclasses
+import BookClasses
 import os
 clear = lambda : os.system('cls')
 
@@ -56,7 +56,7 @@ def BookItemManager():
                 clear()
                 abort = True
 def addBookItem():
-    catalog = bookclasses.Catalog("catalog")
+    catalog = BookClasses.Catalog("catalog")
     abort = False
     message = ""
     while not abort:
@@ -92,7 +92,7 @@ def addBookItem():
             
 
 def viewBookItems():
-    catalog = bookclasses.Catalog("catalog")
+    catalog = BookClasses.Catalog("catalog")
     abort = False
     while not abort:
         print("\nType \"EXIT\" to exit\nOr type anything else to search\n")
@@ -106,11 +106,13 @@ def viewBookItems():
             catalog.printBookItemTable(command)
 
 def removeBookItem():
-    catalog = bookclasses.Catalog("catalog")
+    catalog = BookClasses.Catalog("catalog")
     abort = False
     message = ""
     while not abort:
         print("\nType \"EXIT\" to exit\nOr type anything else to search\n")
+        if message != "":
+            print("\n",message,"\n")
         command = input(">>> ")
         if command == "EXIT":
             abort = True
@@ -176,7 +178,7 @@ def addBook(inputs = {
         "pages" : "",
         "title" : "",
         "year" : ""}):
-    catalog = bookclasses.Catalog("catalog")
+    catalog = BookClasses.Catalog("catalog")
     
     error = ""
 
@@ -218,7 +220,7 @@ def addBook(inputs = {
     if command == "s":
         catalog.addBook(*[inputs[k] for k in inputs])
 def changeBook():
-    catalog = bookclasses.Catalog("catalog")
+    catalog = BookClasses.Catalog("catalog")
     abort = False
     message = ""
     while not abort:
@@ -300,7 +302,7 @@ def changeBook():
             abort = True
     
 def printBooks():
-    catalog = bookclasses.Catalog("catalog")
+    catalog = BookClasses.Catalog("catalog")
     while True:
         
         print("Type \"EXIT\" to leave\nOr type anything else to search for a book\n")
@@ -313,7 +315,7 @@ def printBooks():
             catalog.printBooks(command.lower())
 
 def removeBook():
-    catalog = bookclasses.Catalog("catalog")
+    catalog = BookClasses.Catalog("catalog")
     abort = False
     while not abort:
         
