@@ -6,5 +6,22 @@
         "Gender": "M",
         "Email": "0961962@hr.nl",            
         "Password": "12345678"
+    },
+    {
+        "Name": "Jonas",
+        "SurName": "De Boer",
+        "UserName": "JBoer",
+        "Gender": "M",
+        "Email": "jonas@hr.nl",            
+        "Password": "12345678"
+    }
+    ,
+    {
+        "Name": "Isabelle",
+        "SurName": "Stienen",
+        "UserName": "IsaTien",
+        "Gender": "F",
+        "Email": "isabelle@hr.nl",            
+        "Password": "12345678"
     }
 ]
