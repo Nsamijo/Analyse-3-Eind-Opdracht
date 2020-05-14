@@ -14,28 +14,34 @@ class Customers:
             for row in reader:
                 self.customers.append(row)
 
+    def UpdateCSV(self):
+            temp = []
+            for i in self.customers:
+                temp.append(dict(i))
+
+            names =['Number', 'Gender','NameSet' ,'GivenName' ,'Surname' ,'StreetAddress' ,'ZipCode' ,'City' ,'EmailAddress' ,'Username','TelephoneNumber']
+
+            with open(curdir + '/src/customers.csv', 'w') as File:
+                writer = csv.DictWriter(File, fieldnames=names)
+                writer.writeheader()
+                writer.writerows(temp)
+
     def getUser(self, user):
-        return self.customers[int(user) - 1]
+        return self.customers[user - 1]
+        
+    def removeUser(self, user):
+        self.customers.remove(self.customers[user - 1])
+        self.UpdateCSV()
 
     def addUser(self, gender, nameset, givennam, surnam, adres, zipcode, city, email, usernam, telephon):
         """make another user and update the file"""
-        def UpdateCSV():
-            keys, values = [], []
-            for key, value in self.customers:
-                keys.append(key)
-                values.append(value)
-
-            with open(curdir + '/src/customers.csv', 'w') as File:
-                writer = csv.writer(File)
-                writer.writerow(keys)
-                writer.writerow(values)
 
         user = {}
-        user['Number'] = str(int(self.customers[len(self.customers) - 1]) + 1)
+        user['Number'] = str(int(self.customers[-1]['Number']) + 1)
         user['Gender'] = gender
         user['NameSet'] = nameset
         user['GivenName'] = givennam
-        user['SurName'] = surnam
+        user['Surname'] = surnam
         user['StreetAddress'] = adres
         user['ZipCode'] = zipcode
         user['City'] = city
@@ -45,7 +51,7 @@ class Customers:
 
         self.customers.append(user)
 
-        UpdateCSV()
+        self.UpdateCSV()
 
 #blueprint for a librarian
 class Librarian:

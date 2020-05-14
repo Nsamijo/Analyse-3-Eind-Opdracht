@@ -21,3 +21,8 @@ def printBookTable(lis):
             i += 1
     else:
         print("No books")
+
+def printAllCustomers(lis):
+    print ("{:<15} {:<15} {:<15} {:<15} {:<20}".format('Number','Gender', 'GivenName', 'Surname', 'Username'))
+    for x in lis:
+        print ("{:<10} {:<10} {:<10} {:<10} {:<10}".format(x['Number'],x['Gender'], x['GivenName'], x['Surname'], x['Username']))

@@ -1,13 +1,16 @@
-import bookclasses
+import bookclasses, UserClasses
 import os
 clear = lambda : os.system('cls')
 
 
+def loggedIn(account):
+    clear()
+    print('Public Library System\nLogged is as: ' + account.getName() + '\n')
 
-#main loop
-def main():
+def main(account):
     abort = False
     while not abort:
+        loggedIn(account)
         print("[1] Book manager\n[2] Bookitem manager\n[3] Exit\n")
 
         no = input(">>> ")
@@ -20,10 +23,10 @@ def main():
         if no != "" and 3 >= no >= 1:
             if(no == 1):
                 clear()
-                BookManager()
+                BookManager(account)
             if(no == 2):
                 clear() 
-                BookItemManager()
+                BookItemManager(account)
             if(no == 3):
                 clear()
                 print("Exitting...") 
@@ -31,10 +34,11 @@ def main():
         
 
     
-#Manager for bookitems, here you can add, remove and see bookitems
-def BookItemManager():
+
+def BookItemManager(account):
     abort = False
     while not abort:
+        loggedIn(account)
         print("[1] Add bookitem\n[2] Remove bookitem\n[3] View bookitems\n[4] Back")
         no = input(">>> ")
         try:
@@ -55,7 +59,6 @@ def BookItemManager():
             if no == 4:
                 clear()
                 abort = True
-#screen for adding bookitems
 def addBookItem():
     catalog = bookclasses.Catalog("catalog")
     abort = False
@@ -91,7 +94,7 @@ def addBookItem():
             else:
                 message = ""
             
-#screen for viewing bookitems
+
 def viewBookItems():
     catalog = bookclasses.Catalog("catalog")
     abort = False
@@ -106,7 +109,6 @@ def viewBookItems():
             clear()
             catalog.printBookItemTable(command)
 
-#Screen for removing bookitems
 def removeBookItem():
     catalog = bookclasses.Catalog("catalog")
     abort = False
@@ -142,10 +144,11 @@ def removeBookItem():
         
 
     
-#Bookmanager screen, here you can view, add, remove and change books
-def BookManager(): 
+
+def BookManager(account):
     abort = False
     while not abort:
+        loggedIn(account)
         print("[1] Add book \n[2] View books \n[3] Remove book \n[4] Change book\n[5] Back\n")
         no = input(">>> ")
         try:
@@ -171,7 +174,6 @@ def BookManager():
         else:
             clear()
             print("Try again")
-#Module to add books
 def addBook(inputs = {
         "author" : "",
         "country" : "",
@@ -222,7 +224,6 @@ def addBook(inputs = {
 
     if command == "s":
         catalog.addBook(*[inputs[k] for k in inputs])
-#Module to change books
 def changeBook():
     catalog = bookclasses.Catalog("catalog")
     abort = False
@@ -304,7 +305,7 @@ def changeBook():
                 
         else:
             abort = True
-#Module to view books
+    
 def printBooks():
     catalog = bookclasses.Catalog("catalog")
     while True:
@@ -317,7 +318,7 @@ def printBooks():
         else:
             clear()
             catalog.printBooks(command.lower())
-#Module to remove books
+
 def removeBook():
     catalog = bookclasses.Catalog("catalog")
     abort = False
