@@ -31,7 +31,7 @@ class Customers:
                 writer.writerow(values)
 
         user = {}
-        user['Number'] = str(int(self.customers[self.customers.Length - 1]) + 1)
+        user['Number'] = str(int(self.customers[len(self.customers) - 1]) + 1)
         user['Gender'] = gender
         user['NameSet'] = nameset
         user['GivenName'] = givennam

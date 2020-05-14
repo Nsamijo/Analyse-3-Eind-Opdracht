@@ -4,7 +4,7 @@ clear = lambda : os.system('cls')
 
 
 
-
+#main loop
 def main():
     abort = False
     while not abort:
@@ -31,7 +31,7 @@ def main():
         
 
     
-
+#Manager for bookitems, here you can add, remove and see bookitems
 def BookItemManager():
     abort = False
     while not abort:
@@ -55,6 +55,7 @@ def BookItemManager():
             if no == 4:
                 clear()
                 abort = True
+#screen for adding bookitems
 def addBookItem():
     catalog = bookclasses.Catalog("catalog")
     abort = False
@@ -90,7 +91,7 @@ def addBookItem():
             else:
                 message = ""
             
-
+#screen for viewing bookitems
 def viewBookItems():
     catalog = bookclasses.Catalog("catalog")
     abort = False
@@ -105,6 +106,7 @@ def viewBookItems():
             clear()
             catalog.printBookItemTable(command)
 
+#Screen for removing bookitems
 def removeBookItem():
     catalog = bookclasses.Catalog("catalog")
     abort = False
@@ -140,7 +142,7 @@ def removeBookItem():
         
 
     
-
+#Bookmanager screen, here you can view, add, remove and change books
 def BookManager(): 
     abort = False
     while not abort:
@@ -169,6 +171,7 @@ def BookManager():
         else:
             clear()
             print("Try again")
+#Module to add books
 def addBook(inputs = {
         "author" : "",
         "country" : "",
@@ -219,6 +222,7 @@ def addBook(inputs = {
 
     if command == "s":
         catalog.addBook(*[inputs[k] for k in inputs])
+#Module to change books
 def changeBook():
     catalog = bookclasses.Catalog("catalog")
     abort = False
@@ -300,7 +304,7 @@ def changeBook():
                 
         else:
             abort = True
-    
+#Module to view books
 def printBooks():
     catalog = bookclasses.Catalog("catalog")
     while True:
@@ -313,7 +317,7 @@ def printBooks():
         else:
             clear()
             catalog.printBooks(command.lower())
-
+#Module to remove books
 def removeBook():
     catalog = bookclasses.Catalog("catalog")
     abort = False

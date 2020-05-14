@@ -1,9 +1,9 @@
 import json
 import os
 import helper
-
+#path to current directory, this variable is dynamic for different computers
 curdir = os.path.dirname(os.path.realpath(__file__))
-
+#Class for book
 class Book:
     def __init__(self,id,author,country,imageLink,language,wikilink,pages,title,year):
         self.id = id
@@ -38,19 +38,21 @@ class Book:
 
     def getYear(self):
         return self.year
+    #returns a string used for searching for a book
     def getString(self):
         return ("" + self.author + self.language + self.title + str(self.year) + self.country).lower()
-
+#Bookitem class, only inherits a book
 class BookItem:
     def __init__(self,id,book,status="available"):
         self.id = id
         self.book = book
         self.status = status
-    
+    #change the status of a book
     def changeStatus(self,status):
         self.status = status
-
+#Catalog class, contains books and bookitems
 class Catalog:
+    #reads books and bookitems from jsons
     def __init__(self,name):
         self.name = name
         self.books = []
@@ -65,7 +67,7 @@ class Catalog:
             for i in range(len(data)):
                 j = data[i]
                 self.bookItems.append(BookItem(j["id"],self.getBookbyId(j["BookId"]),j["Status"]))
-
+    #returns an array with all the books where inp is in the getString() func
     def getResults(self,inp):
         res = []
         for book in self.books:
@@ -74,12 +76,12 @@ class Catalog:
         return res
         
     
-
+    #adds a book to the self.books array
     def addBook(self,author,country,imageLink,language,wikilink,pages,title,year):
         self.books.append(Book(self.pickId(),author,country,imageLink,language,wikilink,pages,title,year))
         self.parseCatalog()
     
-    
+    #adds a bookitem to the self.bookitems array
     def addBookItem(self,ID):
         for i in self.books:
             if i.id == ID:
@@ -88,7 +90,7 @@ class Catalog:
                 return True
         return False
             
-    
+    #parses the catalog back to the jsons
     def parseCatalog(self):
         bookdumper = []
         bookitemdumper = []
@@ -115,7 +117,7 @@ class Catalog:
         
         with open(curdir +'/src/bookitems.json','w') as bookItemWrite:
             json.dump(bookitemdumper,bookItemWrite, indent=4, sort_keys=True)
-
+    #picks a bookid based on what is already in the array
     def pickId(self):
         res = 0
         i = 0
@@ -126,6 +128,7 @@ class Catalog:
             else:
                 i += 1
         return res
+    #same as pickid, just for bookitems
     def pickItemId(self):
         res = 0
         i = 0
@@ -136,20 +139,20 @@ class Catalog:
             else:
                 i += 1
         return res
-
+    #removes a book at an index
     def removeBook(self,index):
         self.books.pop(index)
         self.parseCatalog()
-
+    #Prints all books in self.books
     def printBooks(self,search):
         lis = self.getResults(search)
         helper.printBookTable(lis)
-
+    #returns a book with Id
     def getBookbyId(self,ID):
         for book in self.books:
             if book.id == ID:
                 return book
-
+    #prints all bookitems
     def printBookItemTable(self,inp):
         booklis = self.getResults(inp.lower())
         lis = [item for item in self.bookItems if item.book in booklis]
