@@ -74,6 +74,9 @@ class Librarian:
     def getName(self):
         return self.Name + ' ' + self.SurName
 
+    def getData(self):
+        return [self.Name, self.SurName, self.UserName, self.Gender, self.Email, self.Password]
+
 #this class will do the reading and writing for to the librarians json
 class Librarians:
 
@@ -117,12 +120,23 @@ class Librarians:
         #update the json
         self.updateLibrarians()
     
+#edit a librarian
+    def editLibrarian(self, index, librarian):
+        #change the librarians
+        self.librarians[index - 1] = librarian
+        #update the json
+        self.updateLibrarians()
+    
 #remove the librarian || yeet him/her away
     def removeLibrarian(self, index):
         #do the delete
         self.librarians.remove(index)
         #update the json
         self.updateLibrarians()
+
+#get librarian:
+    def getLib(self, index):
+        return self.librarians[index - 1]
 
 #check if the user exits and get the account to log in
     def getAccount(self, usern, passwd):

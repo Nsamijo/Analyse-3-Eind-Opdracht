@@ -1,5 +1,5 @@
 #import os used to clear the terminal and time to make the thread sleep
-import os, time
+import os, time, copy
 #self made "modules" to separate it a bit
 import BookAdmin, UserClasses, helper
 #this lambda is used to clear the terminal #science
@@ -82,7 +82,7 @@ class PLS:
         def loggedIn():
             clear()
             self.printTitle()
-            print('Logged in as: ' + self.logged.getName())
+            print('Logged in as: ' + self.logged.getName() + '\n')
 
         #login with a librarian account
         def login():
@@ -97,14 +97,14 @@ class PLS:
             #check for exit
             if username == 'EXIT':
                 self.admin = None
-                return
+                return True
 
             passwd = input('Password: ')
 
             #check for exit
             if passwd == 'EXIT':
                 self.admin = None
-                return
+                return True
 
             self.logged = self.librarians.getAccount(username, passwd)
             if self.logged == None:
@@ -277,6 +277,98 @@ class PLS:
             return True
 
         def editStaff():
+            loggedIn()
+            #print the options
+            print('What would you like to do?\n[1] Add Librarian\n[2] Edit Librarian Account\n[3] Remove Librarian Account\n[4] Back (Go back to the menu)')
+            choice = input('>>> ')
+            while choice not in ['1', '2', '3', '4']:
+                choice = input('Please enter a valid number >>> ')
+            
+            #go back to the menu
+            if choice == '4':
+                return False
+            #add a librarian to the book club
+            elif choice == '1':
+                loggedIn()
+                print('\nEnter EXIT to exit\n')
+                #holder for the data
+                data =[]
+                #holder for question
+                holder = 'Please enter '
+                #questions
+                questions = ['a name: ', 'a surname: ', 'a username: ', 'your gender (M/F): ', 'a email: ', 'a password: ']
+                #interrogation jk just asking for the data of the librarian
+                for x in questions:
+                    temp = input(holder + x)
+                    #exit
+                    if 'EXIT' == temp:
+                        return True
+                    #if the gender part is reached only 2 answers are allowed
+                    elif 'gender' in temp:
+                        #check if the answer given is allowed
+                        while temp not in ['M', 'F']:
+                            #reask to enter gender
+                            temp = input(holder + x)
+                    else:
+                        #add data to the list
+                        data.append(temp)
+                loggedIn()
+                print('Enter yes or no if the data is correct\nEntering yes will automatically save the data\nEntering no will discard all\n')
+                print('\nFull Name: ' + data[0].title() + ' ' + data[1].title() + '\nUsername: ' + data[2] + '\nGender: ' + data[3] + '\nEmailAddress: ' + data[4] + '\nPassword: ' + data[5])
+
+                save = input('>>> ')
+                while save not in ['yes', 'no']:
+                    save = input('Please enter yes or no >>> ')
+
+                if save == 'yes':
+                    #add a new librarian to the system
+                    self.librarians.addLibrarian(data[0].title(), data[1].title(), data[2], data[3], data[4], data[5])
+                    print('Succesfully added a new Librarian to the system! You will be redirected...')
+                    time.sleep(1.0)
+                    return True
+                else:
+                    #do not add the user. you will be redirected to the menu
+                    print('Librarian has not been added to the system! You will be redirected...')
+                    time.sleep(1.0)
+                    return True
+            #change a certain user
+            elif choice == '2':
+                loggedIn()
+                #index of the logged account
+                indexL = self.librarians.librarians.index(self.logged)
+                #print the librarians except the current
+                helper.printAllLibrarians(self.librarians.librarians, self.logged)
+                #instructions
+                print('\nPlease enter which account you wish to edit!\n NOTE: You will not be able to edit the account that you are logged in with\nEnter EXIT to go back\n')
+                #input
+                choice = input('>>> ')
+                account = None
+                while True:
+                    if choice.isdigit():
+                        if int(choice) - 1 < len(self.librarians.librarians) and int(choice) > 0:
+                            ind = int(choice) - 1
+                            if ind== indexL:
+                                ind += 2
+                            account = self.librarians.getLib(ind)
+                            break
+                    else:
+                        choice = input('Please enter a valid option >>> ')
+                while True:
+                    loggedIn()
+                    copyAcc = copy.deepcopy(account)
+                    data = ['[1] Name: ', '[2] Surname: ', '[3] Username: ', '[4] Gender: ', '[5] EmailAddress: ', '[6] Password: ', '[7] Save', '[8] Back (Unsaved changes will not be saved)']
+                    print('What would you like to change?')
+                    index = 0
+                    for x in data:
+                        if index < len(copyAcc.getData()):
+                            print(x + copyAcc.getData()[index])
+                            index += 1
+                        else:
+                            print(x)
+                    input()
+
+            elif choice == '3':
+                pass
 
             #keep the loop running till the librarian exits
             return True
@@ -325,7 +417,7 @@ class PLS:
             login()
             #go back || check if the admin has been resetted
             if(self.admin == None):
-                return False
+                return True
 
         options()
         return True

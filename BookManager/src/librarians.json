@@ -1,27 +1,34 @@
 [
     {
-        "Name": "Nathan",
-        "SurName": "Samijo",
-        "UserName": "Nsamijo",
+        "Email": "0961962@hr.nl",
         "Gender": "M",
-        "Email": "0961962@hr.nl",            
-        "Password": "12345678"
+        "Name": "Nathan",
+        "Password": "12345678",
+        "SurName": "Samijo",
+        "UserName": "Nsamijo"
     },
     {
-        "Name": "Jonas",
-        "SurName": "De Boer",
-        "UserName": "JBoer",
+        "Email": "jonas@hr.nl",
         "Gender": "M",
-        "Email": "jonas@hr.nl",            
-        "Password": "12345678"
-    }
-    ,
+        "Name": "Jonas",
+        "Password": "12345678",
+        "SurName": "De Boer",
+        "UserName": "JBoer"
+    },
     {
-        "Name": "Isabelle",
-        "SurName": "Stienen",
-        "UserName": "IsaTien",
+        "Email": "isabelle@hr.nl",
         "Gender": "F",
-        "Email": "isabelle@hr.nl",            
-        "Password": "12345678"
+        "Name": "Isabelle",
+        "Password": "12345678",
+        "SurName": "Stienen",
+        "UserName": "IsaTien"
+    },
+    {
+        "Email": "ironman@save.com",
+        "Gender": "M",
+        "Name": "Iron",
+        "Password": "ironmansaves",
+        "SurName": "Man",
+        "UserName": "IronMan"
     }
 ]

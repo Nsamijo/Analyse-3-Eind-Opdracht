@@ -26,3 +26,11 @@ def printAllCustomers(lis):
     print ("{:<15} {:<15} {:<15} {:<15} {:<20}".format('Number','Gender', 'GivenName', 'Surname', 'Username'))
     for x in lis:
         print ("{:<15} {:<15} {:<15} {:<15} {:<20}".format(x['Number'],x['Gender'], x['GivenName'], x['Surname'], x['Username']))
+
+def printAllLibrarians(lis, logged):
+    print ("{:<15} {:<15} {:<15} {:<15}".format('Number','Name', 'Surname', 'Username'))
+    num = 1
+    for x in lis:
+        if x.UserName != logged.UserName:
+            print ("{:<15} {:<15} {:<15} ".format(str(num),x.Name, x.SurName, x.UserName))
+            num += 1
