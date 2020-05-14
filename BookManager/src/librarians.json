@@ -30,5 +30,13 @@
         "Password": "ironmansaves",
         "SurName": "Man",
         "UserName": "IronMan"
+    },
+    {
+        "Email": "jonasdeboer02@gmail.com",
+        "Gender": "M",
+        "Name": "Jonas",
+        "Password": "yeetyeet555",
+        "SurName": "De Boer",
+        "UserName": "Robedjason"
     }
 ]

@@ -1058,17 +1058,6 @@
     {
         "author": "Virginia Woolf",
         "country": "United Kingdom",
-        "id": 97,
-        "imageLink": "images/mrs-dalloway.jpg",
-        "language": "English",
-        "link": "https://en.wikipedia.org/wiki/Mrs_Dalloway\n",
-        "pages": 216,
-        "title": "Mrs Dalloway",
-        "year": 1925
-    },
-    {
-        "author": "Virginia Woolf",
-        "country": "United Kingdom",
         "id": 98,
         "imageLink": "images/to-the-lighthouse.jpg",
         "language": "English",
@@ -1095,7 +1084,7 @@
         "imageLink": "images/the-book-of-job.jpg",
         "language": "Hebrew",
         "link": "https://en.wikipedia.org/wiki/Book_of_Job\n",
-        "pages": "178",
+        "pages": "177",
         "title": "The Book Of Job",
         "year": -600
     }

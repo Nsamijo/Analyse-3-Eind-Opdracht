@@ -310,7 +310,7 @@ def printBooks():
     catalog = bookclasses.Catalog("catalog")
     while True:
         
-        print("Type \"EXIT\" to leave\nOr type anything else to search for a book\n")
+        print("Type \"EXIT\" to leave\nOr type anything else to search for a book\nIf you want to list all books, just press enter")
         command = input(">>> ")
         if command == "EXIT":
             clear()
@@ -324,16 +324,16 @@ def removeBook():
     abort = False
     while not abort:
         
-        print("\nType the number of the book you would like to delete")
         print("\nWhen you want to leave type \"EXIT\"\n")
         command = input(">>> ")
         if command != "EXIT":
             catalog.printBooks(command)
             lis = catalog.getResults(command)
+            print("Type the number of the book you'd like to remove")
+
             command = input(">>> ")
             if(command != "EXIT"):
                 try:
-                    Print("Type the number of the book you'd like to remove")
                     command = int(command)
                     catalog.books.remove(lis[command-1])
                     catalog.parseCatalog()
@@ -343,6 +343,7 @@ def removeBook():
                 else:
                     abort = True
                     clear()
+                    print("Book Removed\n")
         else:
             abort = True
             clear()

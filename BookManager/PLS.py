@@ -20,6 +20,7 @@ class PLS:
         #initiate the files with the data || read the data in
         self.librarians = UserClasses.Librarians()
         self.customers = UserClasses.Customers()
+        self.logout = False
 
     #title
     def printTitle(self):
@@ -71,10 +72,85 @@ class PLS:
         
     #customer redirection
     def customer(self):
-        #loan a book
-        #search for a book
-        return
+        
+        
+        def loggedIn():
+            print("Logged in as:",self.user["Name"])
 
+        def login():
+            message = ""
+            while True:
+                clear()
+                self.printTitle()
+                print("Login for customers")
+                print("Enter EXIT to go back")
+                print("Please enter your username or email")
+                if message != "":
+                    print(message)
+                    print()
+                usernames = {d["Username"] : d["Number"] for d in self.customers.customers}
+                emails = {d["Email"] : d["Number"] for d in self.customers.customers}
+                user = input("Username: ")
+                if user == "EXIT":
+                    self.logout = True
+                    self.user = None
+                else:
+                    if user in usernames:
+                        self.user = self.customers.getUser(usernames[user]+1)
+                        return
+                    elif user in emails:
+                        self.user = self.customers.getUser(emails[user]+1)
+                        return
+                    else:
+                        message = "Invalid input"
+            
+                    
+        def options():
+            clear()
+            message = ""
+            abort = False
+            while not abort:
+                loggedIn()
+                print("[1] See your current loans [2] Create a loan [3] Exit")
+                if message != "":
+                    print(message,"\n")
+                command = input(">>> ")
+                if command.isdigit():
+                    if int(command) in [1,2,3]:
+                        if command == 1:
+                            clear()
+                            seeloans()
+                        elif command == 2:
+                            clear()
+                            createloan()
+                        else:
+                            clear()
+                            abort = True
+                            self.logout = True
+        #loan a book
+        def createloan():
+            abort = False
+            message = ""
+            while not abort:
+                loggedIn()
+                pass
+        #search for a book
+        def seeloans():
+            pass
+        #check if the user is logged out or not
+        if self.logout == True:
+            return False
+
+        #while no one is logged on try logging in
+        while self.user == None:
+            login()
+            #go back || check if the user has been reset
+            if(self.user == None):
+                return True
+
+        options()
+        return True
+            
     #librarian redirection
     def librarian(self):
 
@@ -83,9 +159,11 @@ class PLS:
             clear()
             self.printTitle()
             print('Logged in as: ' + self.logged.getName() + '\n')
-
+            
         #login with a librarian account
         def login():
+            if self.admin == False:
+                self.user = True
             clear()
             self.printTitle()
             print('Login portal for Librarians')
@@ -351,9 +429,12 @@ class PLS:
                                 ind += 2
                             account = self.librarians.getLib(ind)
                             break
+                        
+                    elif choice == "EXIT":
+                        break
                     else:
                         choice = input('Please enter a valid option >>> ')
-                while True:
+                while True and choice != "EXIT":
                     loggedIn()
                     copyAcc = copy.deepcopy(account)
                     data = ['[1] Name: ', '[2] Surname: ', '[3] Username: ', '[4] Gender: ', '[5] EmailAddress: ', '[6] Password: ', '[7] Save', '[8] Back (Unsaved changes will not be saved)']
@@ -415,7 +496,7 @@ class PLS:
         #while no one is logged on try logging in
         while self.logged == None:
             login()
-            #go back || check if the admin has been resetted
+            #go back || check if the admin has been reset
             if(self.admin == None):
                 return True
 
