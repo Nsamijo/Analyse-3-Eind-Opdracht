@@ -33,6 +33,10 @@ class Customers:
         self.customers.remove(self.customers[user - 1])
         self.UpdateCSV()
 
+    def editUser(self, user, data):
+        self.customers[user - 1] = data
+        self.UpdateCSV()
+
     def addUser(self, gender, nameset, givennam, surnam, adres, zipcode, city, email, usernam, telephon):
         """make another user and update the file"""
 

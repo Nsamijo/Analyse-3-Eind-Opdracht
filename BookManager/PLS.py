@@ -33,12 +33,20 @@ class PLS:
             temp = welcomeScreen()
             #exit the application
             if temp == "3":
+                clear()
+                print('Exiting Program...')
+                time.sleep(0.5)
+                clear()
                 return False
 
             while temp not in ['1', '2']:
                 temp = welcomeScreen(False)
                 #check if for exit
                 if temp == "3":
+                    clear()
+                    print('Exiting Program...')
+                    time.sleep(0.5)
+                    clear()
                     return False
 
             #check if it's a librarian these are admins
@@ -73,14 +81,14 @@ class PLS:
             print('Enter EXIT to go back\n')
             print('Please enter your username and password')
 
-            username = input('username: ')
+            username = input('\nUsername: ')
 
             #check for exit
             if username == 'EXIT':
                 self.admin = None
                 return
 
-            passwd = input('password: ')
+            passwd = input('Password: ')
 
             #check for exit
             if passwd == 'EXIT':
@@ -104,31 +112,40 @@ class PLS:
 
             if choice == '1':
                 loggedIn()
-                print('Enter EXIT to exit this (NOTE: nothing will be saved)\nPlease enter all the fields below to register a new customer: \n')
-                name = input('Please enter your name: ')
-                surname = input('Please enter your surname: ')
-                username  = input('Please enter a username: ')
-                nameset = input('Please enter your preferred language: ')
-                adres = input('Please enter your address: ')
-                zipcode = input('Please enter your zipcode: ')
-                city = input('Please enter your city: ')
-                email = input('Please enter your email: ')
-                telephone = input('Please enter your telephone number (mobile): ')
-                sex = input('Please enter your gender ( male / female ): ')
-                while sex not in 'female':
-                    sex = input('Please enter your gender ( male / female ): ')
+                print('\nEnter EXIT to go back (NOTE: nothing will be saved)\nPlease enter all the fields below to register a new customer: \n')
+                #all the questions to fill in
+                ask = ['Please enter your name: ', 'Please enter your surname: ', 'Please enter a username: ', 'Please enter your preferred language: ','Please enter your address: ','Please enter your zipcode: ','Please enter your city: ','Please enter your email: ','Please enter your telephone number (mobile): ','Please enter your gender ( male / female ): ']
                 
+                data = []
+                for x in ask:
+                    if 'gender' in x:
+                        temp = input(x)
+                        while temp not in ['male','female']:
+                            temp = input(x)
+                    else:
+                        temp = input(x)
+
+                    if temp == 'EXIT':
+                        return True
+                    else:
+                        data.append(temp)
+
+            
                 loggedIn()
-                print('\nPlease confirm that the account below is correct: \n\nUsername: ' + username + '\nFull Name: ' + name + ' ' + surname + '\nNameSet(Language): ' + nameset + '\nGender: ' + sex +'\nAddress (Combined): ' + city + ' ' + adres + ' ' + zipcode + '\nEmail: ' + email + '\nTelephonenumber: ' + telephone)
+                print('\nPlease confirm that the account below is correct: \n\nUsername: ' + data[2] + '\nFull Name: ' + data[0].title() + ' ' + data[1].title() + '\nNameSet(Language): ' + data[3].title() + '\nGender: ' + data[9].title() +'\nAddress (Combined): ' + data[6].title() + ' ' + data[4].title() + ' ' + data[5] + '\nEmail: ' + data[7] + '\nTelephonenumber: ' + data[8])
 
                 confirm = input('\nEnter yes to save the account or no to discard and go back: ')
                 while confirm not in 'yesno':
                     confirm = input('Enter yes to save the account or no to discard and go back: ')
 
                 if confirm == 'yes':
-                    self.customers.addUser(sex, nameset, name, surname, adres, zipcode, city, email, username, telephone)
+                    self.customers.addUser(data[9], data[3].title(), data[0].title(), data[1].title(), data[4], data[5], data[6], data[7], data[2], data[8])
+                    print('\nUser has been succesfully added to the system!')
+                    time.sleep(1.0)
                 else:
-                    return
+                    return True
+
+                return True
 
             elif choice == '2':
                 while True:
@@ -170,25 +187,43 @@ class PLS:
                     else:
                         choice = input('Please enter a valid number >>> ')
                 
-                names =['Number', 'Gender','NameSet' ,'GivenName' ,'Surname' ,'StreetAddress' ,'ZipCode' ,'City' ,'EmailAddress' ,'Username','TelephoneNumber']
+                names =['Gender','NameSet' ,'GivenName' ,'Surname' ,'StreetAddress' ,'ZipCode' ,'City' ,'EmailAddress' ,'Username','TelephoneNumber']
                 toEdit = self.customers.getUser(int(choice))
+                editCopy = toEdit.copy()
 
-                loggedIn()
-                print('What attribute would you like to change?') 
-                nums = 1
-                for x in names:
-                    print('[' + str(nums) + ']' + ' ' + x +': ' + toEdit[x])
-                    nums += 1
-
-                #input check
-                print('Please enter which you user you would like to Change!')
-                choice = input('>>> ')
                 while True:
-                    if choice.isdigit():
-                        if int(choice) - 1 < len(names):
+                    loggedIn()
+                    print('What attribute would you like to change?') 
+                    nums = 1
+                    for x in names:
+                        print('[' + str(nums) + ']' + ' ' + x +': ' + editCopy[x])
+                        nums += 1
+
+                    #input check
+                    print('\n\nEnter SAVE to save the changes\nEnter EXIT to exit (Changes will not be saved if not saved!)')
+                    change = input('>>> ')
+                    while True:
+                        if change == 'SAVE':
+                            self.customers.editUser(int(choice), editCopy)
                             break
-                    else:
-                        choice = input('Please enter a valid number >>> ')
+                        elif change == 'EXIT':
+                            return True
+
+                        elif change.isdigit():
+                            if int(change) - 1 < len(names):
+                                break
+                        else:
+                            change = input('Please enter a valid number >>> ')
+                    if change != 'SAVE':
+                        if names[int(change) - 1] == 'Gender':
+                            temp = input('Please enter your gender (male/female): ')
+                            while temp not in ['male', 'female']:
+                                temp = input('Please enter your gender (male/female): ')
+                            editCopy[names[int(change) - 1]] = temp
+                        else:
+                            print('Change ' + names[int(change) - 1] + ': ' + toEdit[names[int(change) - 1]])
+                            temp = input(names[int(change) - 1] + ': ')
+                            editCopy[names[int(change) - 1]] = temp
 
             elif choice == '4':
                 return False
@@ -206,17 +241,21 @@ class PLS:
                 print('Where do you wish to go?\n[1] Library\n[2] Customers\n[3] Staff\n[4] Log out\nPlease enter a number that is part of the selection\n')
                 choice = input('>>> ')
 
+            #books
             if choice == '1':
                 BookAdmin.main(self.logged)
+            #customers
             elif choice == '2':
                 loop = True
                 while loop:
                     loop = customerEditing()
+            #staff
             elif choice == '3':
                 pass
+            #logging out
             elif choice == '4':
-                clear()
-                print('Are you sure you wish to log out? ( yes / no )')
+                loggedIn()
+                print('\nAre you sure you wish to log out? ( yes / no )')
                 temp = input('>>> ')
                 while temp.lower() not in ['yes', 'no']:
                     temp = input('Please enter yes or no >>> ')
