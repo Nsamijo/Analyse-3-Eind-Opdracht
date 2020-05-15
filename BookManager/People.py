@@ -14,6 +14,3 @@ class Customer:
     EmailAddress = str
     Username = str
     TelephoneNumber = str
-
-    def Customer():
-

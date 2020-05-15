@@ -26,7 +26,7 @@ class LoanAdministration:
             for d in data:
                 user = None
                 for u in customers.customers:
-                    if d["userid"] == u["id"]:
+                    if d["Number"] == u["Number"]:
                         user = u
                 self.loans.append(Loan(catalog.getBookbyId(d["bookid"]),user,d["date"]))
         else:
@@ -35,7 +35,14 @@ class LoanAdministration:
     def addloan(self,b,u,d):
         self.loans.append(Loan(b,u,d))
         self.parse()
-    
+
+    def seeLoans(self, u):
+        temps = []
+        for x in self.loans:
+            if u["Number"] == x.user["Number"]:
+                temps.append(x)
+        return temps
+        
     def parse(self):
         loandump = [{
             "BookId" : l.bookItem.id,

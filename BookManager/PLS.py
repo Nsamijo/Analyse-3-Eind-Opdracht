@@ -140,9 +140,14 @@ class PLS:
             while not abort:
                 loggedIn()
                 pass
+            
         #search for a book
         def seeloans():
-            pass
+            loans = self.loans.seeLoans(self.user)
+            if len(loans) == 0:
+                loggedIn()
+                print('\nNo loans\nYou will be redirected to the menu')
+
         #check if the user is logged out or not
         if self.logout == True:
             self.logout = False
