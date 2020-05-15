@@ -143,16 +143,16 @@ class PLS:
             message = ""
             while not abort:
                 loggedIn()
+                command = ""
+                
+                catalog.printBookItemTable(command)
                 command = input(">>> ")
+                booklis = catalog.getResults(command)
+                bookitemlis = [item for item in catalog.bookItems if item.book in booklis]
+                print('\nEnter which book item you would like to loan!\nEnter EXIT if you wish to leave!\n')
                 if command == "EXIT":
                     abort = True
                 else:
-                    booklis = catalog.getResults(command)
-                    bookitemlis = [item for item in catalog.bookItems if item.book in booklis]
-                    i = 1
-                    for item in bookitemlis:
-                        print("%s.%s id = %s"%(i,item.book.title,i.id))
-                        i += 1
                     command = input(">>> ")
                     if command == "EXIT":
                         abort = True
