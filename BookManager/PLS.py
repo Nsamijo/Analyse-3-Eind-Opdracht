@@ -15,6 +15,8 @@ class PLS:
     librarians = None
     #customers to hold all the customers
     customers = None
+    #when it's a customer
+    user = None
 
     def __init__(self):
         #initiate the files with the data || read the data in
@@ -75,7 +77,8 @@ class PLS:
         
         
         def loggedIn():
-            print("Logged in as:",self.user["Name"])
+            clear()
+            print("Logged in as:",self.user["GivenName"])
 
         def login():
             message = ""
@@ -88,30 +91,30 @@ class PLS:
                 if message != "":
                     print(message)
                     print()
-                usernames = {d["Username"] : d["Number"] for d in self.customers.customers}
-                emails = {d["Email"] : d["Number"] for d in self.customers.customers}
-                user = input("Username: ")
-                if user == "EXIT":
+                usernames = list({d["Username"] : d["Number"] for d in self.customers.customers})
+                emails = list({d["EmailAddress"] : d["Number"] for d in self.customers.customers})
+                account = input("Username: ")
+                if account == "EXIT":
                     self.logout = True
                     self.user = None
+                    self.admin = None
+                    return True
                 else:
-                    if user in usernames:
-                        self.user = self.customers.getUser(usernames[user]+1)
+                    if account in usernames:
+                        self.user = self.customers.getUser(usernames.index(account))
                         return
-                    elif user in emails:
-                        self.user = self.customers.getUser(emails[user]+1)
+                    elif account in emails:
+                        self.user = self.customers.getUser(emails.index(account))
                         return
                     else:
                         message = "Invalid input"
             
                     
         def options():
-            clear()
             message = ""
-            abort = False
-            while not abort:
+            while True:
                 loggedIn()
-                print("[1] See your current loans [2] Create a loan [3] Exit")
+                print("\n[1] See your current loans \n[2] Create a loan \n[3] Exit")
                 if message != "":
                     print(message,"\n")
                 command = input(">>> ")
@@ -125,8 +128,9 @@ class PLS:
                             createloan()
                         else:
                             clear()
-                            abort = True
                             self.logout = True
+                            self.admin = None
+                            return True
         #loan a book
         def createloan():
             abort = False
@@ -139,7 +143,8 @@ class PLS:
             pass
         #check if the user is logged out or not
         if self.logout == True:
-            return False
+            self.logout = False
+            return True
 
         #while no one is logged on try logging in
         while self.user == None:
@@ -273,7 +278,7 @@ class PLS:
                     print('\nDo you wish to remove the customer: ' + self.customers.getUser(int(choice))['Username'] + '? (yes/no)')
                     temp = input('>>>')
                     while temp not in 'yesno':
-                        temp = input('Please enter yes or no >>>')
+                        temp = input('Please enter yes or no >>> ')
 
                     #yeet the customer away with the might of ZEUS
                     if temp == 'yes':
@@ -431,10 +436,11 @@ class PLS:
                             break
                         
                     elif choice == "EXIT":
-                        break
+                        return True
                     else:
                         choice = input('Please enter a valid option >>> ')
-                while True and choice != "EXIT":
+
+                while True and choice != '8':
                     loggedIn()
                     copyAcc = copy.deepcopy(account)
                     data = ['[1] Name: ', '[2] Surname: ', '[3] Username: ', '[4] Gender: ', '[5] EmailAddress: ', '[6] Password: ', '[7] Save', '[8] Back (Unsaved changes will not be saved)']
@@ -446,7 +452,12 @@ class PLS:
                             index += 1
                         else:
                             print(x)
-                    input()
+
+                    choice = input('>>> ', end='\r')
+                    while choice not in [str(x) for x in range(1, 9)]:
+                        choice = input('Please enter one of the options below >>> ')
+                    
+                return True
 
             elif choice == '3':
                 pass
