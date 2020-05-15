@@ -130,6 +130,8 @@ class PLS:
                     return True
                 elif command == '1':
                     seeloans()
+                elif command == '2':
+                    createloan()
                 
 
 
