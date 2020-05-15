@@ -107,7 +107,7 @@ class PLS:
                         self.user = self.customers.getUser(emails.index(account))
                         return
                     else:
-                        message = "Invalid input"
+                        message = "Invalid Username"
             
                     
         def options():
@@ -248,21 +248,23 @@ class PLS:
                     #update the file with customers
                     self.customers.addUser(data[9], data[3].title(), data[0].title(), data[1].title(), data[4], data[5], data[6], data[7], data[2], data[8])
                     #confirmation
-                    print('\nUser has been succesfully added to the system!')
+                    print('\Customer has been succesfully added to the system!')
                     time.sleep(1.0)
                 else:
                     #exit if it is no
+                    print('\Customer has not been added to the system!')
+                    time.sleep(0.5)
                     return True
 
                 return True
-
+            #remove customer
             elif choice == '2':
                 while True:
                     loggedIn()
                     #print all customers from the system
                     helper.printAllCustomers(self.customers.customers)
                     #check which customer to yeet away (delete)
-                    print('Please enter which you user you would like to remove! Enter EXIT to go back!')
+                    print('Please enter which you customer you would like to remove! Enter EXIT to go back!')
                     choice = input('>>> ')
                     while True:
                         if choice.isdigit():
@@ -293,7 +295,7 @@ class PLS:
                 loggedIn()
                 #print all the customers in the system
                 helper.printAllCustomers(self.customers.customers)
-                print('Please enter which you user you would like to Change!')
+                print('Please enter which you customer you would like to modify!')
                 #check if the input is valid
                 choice = input('>>> ')
                 while True:
@@ -310,21 +312,24 @@ class PLS:
 
                 #when already selected a customer
                 #stay in this loop till the librarian exits
+                #variable to check if the librarian saved
+                saved = False
                 while True:
                     loggedIn()
-                    print('What attribute would you like to change?') 
                     nums = 1
                     for x in names:
                         print('[' + str(nums) + ']' + ' ' + x +': ' + editCopy[x])
                         nums += 1
 
                     #input check
-                    print('\n\nEnter SAVE to save the changes\nEnter EXIT to exit (Changes will not be saved if not saved!)')
+                    print('\n\nEnter SAVE to save the changes (Saved: ' + str(saved) + ')\nEnter EXIT to exit (Changes will not be saved if not saved!)')
+                    print('What would you like to modify?') 
                     change = input('>>> ')
                     while True:
                         #save the changes made
                         if change == 'SAVE':
                             self.customers.editUser(int(choice), editCopy)
+                            saved = True
                             break
                         #exit back to the customer menu going back to the main menu
                         elif change == 'EXIT':
@@ -346,11 +351,13 @@ class PLS:
                             while temp not in ['male', 'female']:
                                 temp = input('Please enter your gender (male/female): ')
                             editCopy[names[int(change) - 1]] = temp
+                            saved = False
                         else:
                             #change everything except gender
                             print('Change ' + names[int(change) - 1] + ': ' + toEdit[names[int(change) - 1]])
-                            temp = input(names[int(change) - 1] + ': ')
+                            temp = input( 'New ' + names[int(change) - 1] + ': ')
                             editCopy[names[int(change) - 1]] = temp
+                            saved = False
 
             elif choice == '4':
                 #exit the menu
@@ -362,13 +369,13 @@ class PLS:
         def editStaff():
             loggedIn()
             #print the options
-            print('What would you like to do?\n[1] Add Librarian\n[2] Edit Librarian Account\n[3] Remove Librarian Account\n[4] Back (Go back to the menu)')
+            print('What would you like to do?\n[1] Add Librarian\n[2] Remove Librarian Account\n[3] Back (Go back to the menu)')
             choice = input('>>> ')
             while choice not in ['1', '2', '3', '4']:
                 choice = input('Please enter a valid number >>> ')
             
             #go back to the menu
-            if choice == '4':
+            if choice == '3':
                 return False
             #add a librarian to the book club
             elif choice == '1':
@@ -422,46 +429,40 @@ class PLS:
                 #print the librarians except the current
                 helper.printAllLibrarians(self.librarians.librarians, self.logged)
                 #instructions
-                print('\nPlease enter which account you wish to edit!\n NOTE: You will not be able to edit the account that you are logged in with\nEnter EXIT to go back\n')
+                print('\nPlease enter which Librarian you wish to remove!\n NOTE: You will not be able to remove the account that you are logged in with currently\nEnter EXIT to go back\n')
                 #input
                 choice = input('>>> ')
                 account = None
-                while True:
+                indexA = None
+                while account == None:
                     if choice.isdigit():
-                        if int(choice) - 1 < len(self.librarians.librarians) and int(choice) > 0:
+                        if int(choice)< len(self.librarians.librarians) and int(choice) > 0:
                             ind = int(choice) - 1
-                            if ind== indexL:
+                            if ind >= indexL:
                                 ind += 2
                             account = self.librarians.getLib(ind)
+                            indexA = ind
                             break
+                        else:
+                            choice = input('Please enter a valid option >>> ') 
                         
                     elif choice == "EXIT":
                         return True
-                    else:
-                        choice = input('Please enter a valid option >>> ')
 
-                while True and choice != '8':
-                    loggedIn()
-                    copyAcc = copy.deepcopy(account)
-                    data = ['[1] Name: ', '[2] Surname: ', '[3] Username: ', '[4] Gender: ', '[5] EmailAddress: ', '[6] Password: ', '[7] Save', '[8] Back (Unsaved changes will not be saved)']
-                    print('What would you like to change?')
-                    index = 0
-                    for x in data:
-                        if index < len(copyAcc.getData()):
-                            print(x + copyAcc.getData()[index])
-                            index += 1
-                        else:
-                            print(x)
-
-                    choice = input('>>> ', end='\r')
-                    while choice not in [str(x) for x in range(1, 9)]:
-                        choice = input('Please enter one of the options below >>> ')
-                    
-                return True
-
-            elif choice == '3':
-                pass
-
+                loggedIn()
+                print('\n Do you wish to delete Librarian: ' + account.Name + ' ' + account.SurName + '?(yes/no)')
+                answer = input('>>> ')
+                while answer not in 'yesno':
+                    answer = input('Please enter yes or no >>> ')
+                
+                if answer == 'yes':
+                    self.librarians.removeLibrarian(account)
+                    print('\nLibrarian has been removed succesfully!\n')
+                    time.sleep(0.5)
+                else:
+                    print('\nLibrarian has not been removed!\n')
+                    time.sleep(0.5)
+                
             #keep the loop running till the librarian exits
             return True
 

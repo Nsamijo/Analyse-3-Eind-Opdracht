@@ -120,13 +120,6 @@ class Librarians:
         #update the json
         self.updateLibrarians()
     
-#edit a librarian
-    def editLibrarian(self, index, librarian):
-        #change the librarians
-        self.librarians[index - 1] = librarian
-        #update the json
-        self.updateLibrarians()
-    
 #remove the librarian || yeet him/her away
     def removeLibrarian(self, index):
         #do the delete
