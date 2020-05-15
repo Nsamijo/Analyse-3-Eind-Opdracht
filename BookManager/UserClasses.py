@@ -8,7 +8,7 @@ class Customers:
 
     customers = []
 
-    def __init__(self):
+    def Load(self):
         with open(curdir + '/src/customers.csv', 'r') as File:
             reader = csv.DictReader(File)
             for row in reader:

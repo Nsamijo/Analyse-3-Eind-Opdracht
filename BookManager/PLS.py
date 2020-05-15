@@ -1,7 +1,7 @@
 #import os used to clear the terminal and time to make the thread sleep
 import os, time, copy
 #self made "modules" to separate it a bit
-import BookAdmin, UserClasses, helper
+import BookAdmin, UserClasses, helper, LoanClasses
 #this lambda is used to clear the terminal #science
 clear = lambda : os.system('cls')
 
@@ -22,6 +22,8 @@ class PLS:
         #initiate the files with the data || read the data in
         self.librarians = UserClasses.Librarians()
         self.customers = UserClasses.Customers()
+        self.customers.Load()
+        self.loans = LoanClasses.LoanAdministration()
         self.logout = False
 
     #title
@@ -78,7 +80,7 @@ class PLS:
         
         def loggedIn():
             clear()
-            print("Logged in as:",self.user["GivenName"])
+            print("Logged in as:",self.user["GivenName"], self.user["Surname"])
 
         def login():
             message = ""
@@ -101,10 +103,10 @@ class PLS:
                     return True
                 else:
                     if account in usernames:
-                        self.user = self.customers.getUser(usernames.index(account))
+                        self.user = self.customers.getUser(usernames.index(account) + 1)
                         return
                     elif account in emails:
-                        self.user = self.customers.getUser(emails.index(account))
+                        self.user = self.customers.getUser(emails.index(account) + 1)
                         return
                     else:
                         message = "Invalid Username"
@@ -114,7 +116,7 @@ class PLS:
             message = ""
             while True:
                 loggedIn()
-                print("\n[1] See your current loans \n[2] Create a loan \n[3] Exit")
+                print("\n[1] See your current loans\n[2] Create a loan\n[3] Exit")
                 if message != "":
                     print(message,"\n")
                 command = input(">>> ")
@@ -260,36 +262,42 @@ class PLS:
             #remove customer
             elif choice == '2':
                 while True:
+                    #ingelogd
                     loggedIn()
-                    #print all customers from the system
+                    #print the customers yeet
                     helper.printAllCustomers(self.customers.customers)
-                    #check which customer to yeet away (delete)
                     print('Please enter which you customer you would like to remove! Enter EXIT to go back!')
-                    choice = input('>>> ')
+                    user = input('>>> ')
                     while True:
-                        if choice.isdigit():
-                            if int(choice) - 1 < len(self.customers.customers):
-                                break
-                        elif choice == 'EXIT':
-                            return True
+
+                        while True:
+                            if user.isdigit():
+                                if int(user) <= len(self.customers.customers) and int(user) > 0:
+                                    break
+                            elif user == 'EXIT':
+                                return True
+                            else:
+                                user = input('Please enter a valid number or EXIT to go back >>> ')
+
+                        loggedIn()
+                        #prompt if the customer has to be deleted
+                        print('\nDo you wish to remove the customer: ' + self.customers.getUser(int(user))['Username'] + '? (yes/no)')
+                        temp = input('>>>')
+                        while temp not in ['yes', 'no']:
+                            temp = input('Please enter yes or no >>> ')
+
+                        #yeet the customer away with the might of ZEUS
+                        if temp == 'yes':
+                            self.customers.removeUser(int(user))
+                            user = None
+                            print('\nCustomer has been removed succesfully from the system!')
+                            time.sleep(1.0)
+                            break
+                        #keep the customer
                         else:
-                            choice = input('Please enter a valid number or EXIT to go back >>> ')
-
-                    loggedIn()
-                    #prompt if the customer has to be deleted
-                    print('\nDo you wish to remove the customer: ' + self.customers.getUser(int(choice))['Username'] + '? (yes/no)')
-                    temp = input('>>>')
-                    while temp not in 'yesno':
-                        temp = input('Please enter yes or no >>> ')
-
-                    #yeet the customer away with the might of ZEUS
-                    if temp == 'yes':
-                        self.customers.removeUser(int(choice))
-                        print('\nCustomer has been removed succesfully from the system!')
-                    #keep the customer
-                    else:
-                        print('Customer has not been removed from the system!')
-                        time.sleep(1.0)
+                            print('Customer has not been removed from the system!')
+                            time.sleep(1.0)
+                            break
                 
             elif choice == '3':
                 loggedIn()
