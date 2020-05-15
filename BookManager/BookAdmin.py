@@ -243,7 +243,7 @@ def changeBook():
                 try:
                     command = int(command)
                     book = lis[command-1]
-                    error = ""
+                    message = ""
                     inputs = {
                         "author" : book.author,
                         "country" : book.country,
@@ -254,6 +254,7 @@ def changeBook():
                         "title" : book.title,
                         "year" : book.year}
                     abort = False
+                    clear()
                     while not abort:
                         print("To assign a value, type: variable=value")
                         print("For example: author=J.K. Rowling")
@@ -267,25 +268,30 @@ def changeBook():
                         print("Pages: %s"%(inputs["pages"]))
                         print("Title: %s"%(inputs["title"]))
                         print("Year: %s"%(inputs["year"]))
-                        print(error + "\n")
+                        print("\n" + message + "\n")
                         command = input(">>> ")
                         if command != 'e' and command != 's':
                             command = command.split("=")
                             if len(command) >= 2:
-                                try:
-                                    inputs[command[0]] = command[1]
-                                except:
+                                if command[0].lower() in inputs:
+                                    inputs[command[0].lower()] = command[1]
+                                    message = ""
+                                else:
                                     clear()
-                                    error = "No variable with that name"
+                                    message = "No variable with that name\nTo assign a value, type: variable=value"
                             elif len(command) == 1:
                                 for var in inputs:
                                     if inputs[var] == "":
                                         inputs[var] = command[0]
+                                        message = ""
                                         break
+                                    else:
+                                        message = "Invalid input\nTo assign a value, type: variable=value"
+                                clear()
                         else:
                             abort = True
                             clear()
-
+                        clear()
                     if command == "s":
                         catalog.books.remove(book)
                         catalog.addBook(*[inputs[k] for k in inputs])
