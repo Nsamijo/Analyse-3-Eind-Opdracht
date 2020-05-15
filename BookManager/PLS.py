@@ -146,10 +146,10 @@ class PLS:
                 command = ""
                 
                 catalog.printBookItemTable(command)
-                command = input(">>> ")
                 booklis = catalog.getResults(command)
                 bookitemlis = [item for item in catalog.bookItems if item.book in booklis]
                 print('\nEnter which book item you would like to loan!\nEnter EXIT if you wish to leave!\n')
+                command = input(">>> ")
                 if command == "EXIT":
                     abort = True
                 else:
@@ -160,8 +160,11 @@ class PLS:
                         try:
                             command = int(command)
                             self.loans.addloan(bookitemlis[command-1],self.user["Number"], str(date.today()))
-                        except:
-                            print("")
+                            print("\nBook loaned Succesfully!")
+                        except ValueError:
+                            print("Invalid input")
+                        except IndexError: 
+                            print("Number not in list of bookitems")
                                 
         #search for a book
         def seeloans():
