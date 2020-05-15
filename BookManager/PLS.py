@@ -81,7 +81,7 @@ class PLS:
         
         def loggedIn():
             clear()
-            print("Logged in as:",self.user["GivenName"], self.user["Surname"])
+            print("Logged in as:",self.user["GivenName"], self.user["Surname"], '\n')
 
         def login():
             message = ""
@@ -149,22 +149,20 @@ class PLS:
                 booklis = catalog.getResults(command)
                 bookitemlis = [item for item in catalog.bookItems if item.book in booklis]
                 print('\nEnter which book item you would like to loan!\nEnter EXIT if you wish to leave!\n')
+                
                 command = input(">>> ")
                 if command == "EXIT":
                     abort = True
                 else:
-                    command = input(">>> ")
-                    if command == "EXIT":
-                        abort = True
-                    else:
-                        try:
-                            command = int(command)
-                            self.loans.addloan(bookitemlis[command-1],self.user["Number"], str(date.today()))
-                            print("\nBook loaned Succesfully!")
-                        except ValueError:
-                            print("Invalid input")
-                        except IndexError: 
-                            print("Number not in list of bookitems")
+                    try:
+                        command = int(command)
+                        self.loans.addloan(bookitemlis[command-1],self.user["Number"], str(date.today()))
+                        print("\nBook loaned Succesfully!")
+                        time.sleep(0.5)
+                    except ValueError:
+                        print("Invalid input")
+                    except IndexError: 
+                        print("Number not in list of bookitems")
                                 
         #search for a book
         def seeloans():
