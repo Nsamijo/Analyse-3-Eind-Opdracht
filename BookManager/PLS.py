@@ -120,19 +120,17 @@ class PLS:
                 if message != "":
                     print(message,"\n")
                 command = input(">>> ")
-                if command.isdigit():
-                    if int(command) in [1,2,3]:
-                        if command == 1:
-                            clear()
-                            seeloans()
-                        elif command == 2:
-                            clear()
-                            createloan()
-                        else:
-                            clear()
-                            self.logout = True
-                            self.admin = None
-                            return True
+                while command not in ['1', '2', '3']:
+                    command = input(">>> ")
+
+                if command == '3':
+                    self.user = None
+                    self.logout = True
+                    return True
+                elif command == '1':
+                    seeloans()
+
+
         #loan a book
         def createloan():
             abort = False
@@ -146,7 +144,8 @@ class PLS:
             loans = self.loans.seeLoans(self.user)
             if len(loans) == 0:
                 loggedIn()
-                print('\nNo loans\nYou will be redirected to the menu')
+                print('\nNo loans\nPress enter to return to the menu!')
+                input()
 
         #check if the user is logged out or not
         if self.logout == True:
