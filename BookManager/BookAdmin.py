@@ -330,26 +330,31 @@ def removeBook():
     abort = False
     while not abort:
         
-        print("\nWhen you want to leave type \"EXIT\"\n")
+        print("Search for the book you'd like to delete\nWhen you want to leave type \"EXIT\"\n")
         command = input(">>> ")
         if command != "EXIT":
-            catalog.printBooks(command)
-            lis = catalog.getResults(command)
-            print("Type the number of the book you'd like to remove")
+            clear()
+            catalog.printBooks(command.lower())
+            lis = catalog.getResults(command.lower())
+            if lis != []:
+                print("Type the number of the book you'd like to remove")
 
-            command = input(">>> ")
-            if(command != "EXIT"):
-                try:
-                    command = int(command)
-                    catalog.books.remove(lis[command-1])
-                    catalog.parseCatalog()
-                except:
-                    clear()
-                    print("Invalid input")
-                else:
-                    abort = True
-                    clear()
-                    print("Book Removed\n")
+                command = input(">>> ")
+                if(command != "EXIT"):
+                    try:
+                        command = int(command)
+                        catalog.books.remove(lis[command-1])
+                        for item in catalog.bookItems:
+                            if item.book == lis[command-1]:
+                                catalog.bookItems.remove(item)
+                        catalog.parseCatalog()
+                    except:
+                        clear()
+                        print("Invalid input")
+                    else:
+                        abort = True
+                        clear()
+                        print("Book Removed\n")
         else:
             abort = True
             clear()

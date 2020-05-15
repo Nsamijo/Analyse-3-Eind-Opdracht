@@ -25,11 +25,6 @@
         "id": 4
     },
     {
-        "BookId": 97,
-        "Status": "available",
-        "id": 5
-    },
-    {
         "BookId": 0,
         "Status": "available",
         "id": 6

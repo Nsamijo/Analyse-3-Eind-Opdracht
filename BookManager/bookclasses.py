@@ -109,7 +109,9 @@ class Catalog:
         for i in self.bookItems:
             bookitemdumper.append({
                 "id" : i.id,
+                
                 "BookId" : i.book.id,
+
                 "Status" : i.status
             })
         
