@@ -1,7 +1,8 @@
 #import os used to clear the terminal and time to make the thread sleep
 import os, time, copy
+from datetime import date as date
 #self made "modules" to separate it a bit
-import BookAdmin, UserClasses, helper, LoanClasses
+import BookAdmin, UserClasses, helper, LoanClasses, bookclasses
 #this lambda is used to clear the terminal #science
 clear = lambda : os.system('cls')
 
@@ -129,23 +130,56 @@ class PLS:
                     return True
                 elif command == '1':
                     seeloans()
+                
 
 
         #loan a book
         def createloan():
+            catalog = bookclasses.Catalog("")
+            
             abort = False
             message = ""
             while not abort:
                 loggedIn()
-                pass
-            
+                command = input(">>> ")
+                if command == "EXIT":
+                    abort = True
+                else:
+                    booklis = catalog.getResults(command)
+                    bookitemlis = [item for item in catalog.bookItems if item.book in booklis]
+                    i = 1
+                    for item in bookitemlis:
+                        print("%s.%s id = %s"%(i,item.book.title,i.id))
+                        i += 1
+                    command = input(">>> ")
+                    if command == "EXIT":
+                        abort = True
+                    else:
+                        try:
+                            command = int(command)
+                            self.loans.addloan(bookitemlis[command-1],self.user["Number"], str(date.today()))
+                        except:
+                            print("")
+                                
         #search for a book
         def seeloans():
+
             loans = self.loans.seeLoans(self.user)
             if len(loans) == 0:
                 loggedIn()
                 print('\nNo loans\nPress enter to return to the menu!')
                 input()
+            else:
+                loggedIn()
+                print('\nYou currently have loaned: \n')
+                nums = 1
+                for x in loans:
+                    print(str(nums) + '. ' + "%s"%(x.bookitem.book.title))
+                    nums += 1
+                print('\nPress enter to go back')
+                input()
+
+
 
         #check if the user is logged out or not
         if self.logout == True:

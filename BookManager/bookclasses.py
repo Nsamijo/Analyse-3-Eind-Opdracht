@@ -64,6 +64,7 @@ class Catalog:
             data = json.load(bookItemRead)
             for i in range(len(data)):
                 j = data[i]
+                #the good stuff || chapeau || link the book with the book tine #lifehack || Proficiat
                 self.bookItems.append(BookItem(j["id"],self.getBookbyId(j["BookId"]),j["Status"]))
 
     def getResults(self,inp):
@@ -151,6 +152,13 @@ class Catalog:
         for book in self.books:
             if book.id == ID:
                 return book
+    def getBookitembyId(self,ID):
+        for item in self.bookItems:
+            #if type(item.id) != type(" "):
+            #    if int(item.id) == ID:
+            #        return item
+            if item.id == ID:
+                return item
 
     def printBookItemTable(self,inp):
         booklis = self.getResults(inp.lower())

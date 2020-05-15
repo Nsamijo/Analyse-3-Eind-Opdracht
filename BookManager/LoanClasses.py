@@ -8,8 +8,8 @@ customers = UserClasses.Customers()
 class Loan:
     def __init__(self,b,u,d):
         #bookitem
-        self.bookItem = b
-        #username
+        self.bookitem = b
+        #id || contains the id of the customer
         self.user = u
         #date
         self.date = d
@@ -20,18 +20,12 @@ class LoanAdministration:
     def __init__(self):
         self.loans = []
         customers.Load()
-        if os.stat(curdir + "/src/loans.json").st_size > 0:
-            with open(curdir + "/src/loans.json","r") as loanread:
-                data = json.load(loanread)
+        with open(curdir + "/src/loans.json","r") as loanread:
+            data = json.load(loanread)
             for d in data:
-                user = None
-                for u in customers.customers:
-                    if d["Number"] == u["Number"]:
-                        user = u
-                self.loans.append(Loan(catalog.getBookbyId(d["bookid"]),user,d["date"]))
-        else:
-            print('\nNo loans in the system')
-    
+                
+                self.loans.append(Loan(catalog.getBookitembyId(d["bookitem"]),d["user"],d["date"]))
+
     def addloan(self,b,u,d):
         self.loans.append(Loan(b,u,d))
         self.parse()
@@ -39,15 +33,15 @@ class LoanAdministration:
     def seeLoans(self, u):
         temps = []
         for x in self.loans:
-            if u["Number"] == x.user["Number"]:
+            if u["Number"] == x.user:
                 temps.append(x)
         return temps
-        
+
     def parse(self):
         loandump = [{
-            "BookId" : l.bookItem.id,
-            "User" : l.user["Number"],
-            "Date" : l.date
+            "bookitem" : l.bookitem.id,
+            "user" : l.user,
+            "date" : l.date
         } for l in self.loans]
         
         with open(curdir + "/src/loans.json","w") as loanwrite:
