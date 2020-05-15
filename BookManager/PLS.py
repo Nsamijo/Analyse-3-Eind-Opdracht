@@ -1,3 +1,10 @@
+#The creators of this masterpiece: 
+#
+#1. Jonas de Boer (0983180@hr.nl)
+#2. Isabelle Stienen (0993377@hr.nl)
+#3. Nathan Samijo (0961962@hr.nl)
+
+
 #import os used to clear the terminal and time to make the thread sleep
 import os, time, copy
 from datetime import date as date
